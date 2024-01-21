@@ -47,9 +47,10 @@ export class UsersService {
       sum += digit * num;
       num--;
     }
-    const rest = sum % 11;
-    const calculatedDigit = 11 - rest;
-    return baseCPF + `${calculatedDigit}`;
+    let rest = sum % 11;
+    const calculatedDigit = rest < 2 ? 0 : 11 - rest;
+    const result = baseCPF + `${calculatedDigit}`;
+    return result;
   }
   async findAll(page: number, limit: number) {
     const skipPage = (page - 1) * limit;
