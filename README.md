@@ -1,11 +1,6 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  ## Description
+  # CPF - Checker ✅
+  
+  ## Description 📖
 
   In this application, the user can register their data, such as name, CPF and date of birth. To do this, some rules must be followed, such as: The CPF number must be a valid number, have the correct size (11 digits), have only numbers and not be    registered in the system.
 
@@ -29,6 +24,9 @@
 ```bash
 $ npm install
 ```
+```bash
+$ npx prisma migrate
+```
 
 ## Running the app
 
@@ -45,6 +43,8 @@ $ npm run start:prod
 
 ## Test
 
+  ### (To create a test database, please create a .env.test using the DATABASE_URL example in .env.example and run ```$ npm run prisma:test```)
+
 ```bash
 # unit tests
 $ npm run test
@@ -56,10 +56,10 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## To run with Docker:
+## To run with Docker 🐳:
 
 ```bash
-  docker compose up
+  $ docker compose up 
 ```
 
 ## Routes guide:
@@ -83,7 +83,9 @@ $ npm run test:cov
       the system returns the user with the CPF specified in the parameter
 ```
 
+## Why did I decide to use these technologies?
 
+  ### I decided to develop this project using a combination of excellent technologies that, besides being very up-to-date, are highly efficient in what they set out to do. The significant advantage of using NestJS in your backend instead of pure Node is its strong typing, which, when combined with TypeScript, makes the code very secure and efficient. Integration and unit tests with Jest also bring greater robustness and security to the development process, while Docker provides convenience for those working with or testing the code, as there's no need to have anything installed on your machine – just install Docker and run the command.
 
 
 ### Feel free to contact me 😄:
