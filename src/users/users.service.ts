@@ -23,10 +23,10 @@ export class UsersService {
       createUserDto.birthday,
     );
   }
-  private cleanCPF(cpf: string): string {
+  cleanCPF(cpf: string): string {
     return cpf.replace(/\D/g, '');
   }
-  private validateCPF(cpf: string): void {
+  validateCPF(cpf: string): void {
     if (cpf.length !== 11) {
       throw new HttpException(
         'Invalid CPF: must have 11 digits',
@@ -34,13 +34,13 @@ export class UsersService {
       );
     }
   }
-  private calculateAndVerifyCPF(baseCPF: string): string {
+  calculateAndVerifyCPF(baseCPF: string): string {
     const newCPF = baseCPF.substring(0, 9);
     const cpfWithFirstDigit = this.calculateDigit(newCPF, 10);
     const cpfWithSecondDigit = this.calculateDigit(cpfWithFirstDigit, 11);
     return cpfWithSecondDigit;
   }
-  private calculateDigit(baseCPF: string, num: number): string {
+  calculateDigit(baseCPF: string, num: number): string {
     let sum = 0;
     for (let i = 0; i < baseCPF.length; i++) {
       const digit = Number(baseCPF[i]);

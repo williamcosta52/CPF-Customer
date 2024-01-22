@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - backend-network
+    volumes:
+      - backend-volume:/var/lib/postgresql/data
+  backend:
+    build: .
+    container_name: backend
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/cpf_check?schema=public
+    depends_on:
+      - postgres
+    command: sh -c "npm run prisma migrate"
+
+networks:
+  backend-network:
+volumes:
+  backend-volume:
