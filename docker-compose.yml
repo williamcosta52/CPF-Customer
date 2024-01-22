@@ -15,11 +15,9 @@ services:
     container_name: backend
     ports:
       - 3000:3000
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/cpf_check?schema=public
     depends_on:
       - postgres
-    command: sh -c "npm run prisma migrate"
+    command: sh -c "npx prisma migrate"
 
 networks:
   backend-network:

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 import { PrismaModule } from '../src/prisma/prisma.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 
@@ -13,11 +13,9 @@ describe('Users e2e', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule, PrismaModule],
     }).compile();
-
     app = moduleFixture.createNestApplication();
     app.useGlobalPipes(new ValidationPipe());
     prisma = app.get(PrismaService);
-
     await prisma.user.deleteMany();
     await app.init();
   });
@@ -37,6 +35,10 @@ describe('Users e2e', () => {
         birthday: '28/01/1998',
       })
       .expect(HttpStatus.CREATED);
+    const user = await prisma.user.findFirst({
+      where: { cpf: '11144477735' },
+    });
+    expect(user.cpf).not.toBe(null);
   });
   it('/users (POST) => should return a status 422 (UNPROCESSABLE_ENTITY) when CPF is invalid', async () => {
     await request(app.getHttpServer())
@@ -52,21 +54,17 @@ describe('Users e2e', () => {
       });
   });
   it('/users (POST) => should not register a CPF if it is already registered', async () => {
+    await request(app.getHttpServer()).post('/users').send({
+      name: 'Test',
+      birthday: '28/01/1998',
+      cpf: '111.444.777-35',
+    });
     await request(app.getHttpServer())
       .post('/users')
       .send({
         name: 'Test',
-        cpf: '111.444.777-35',
         birthday: '28/01/1998',
-      })
-      .expect(HttpStatus.CREATED);
-
-    await request(app.getHttpServer())
-      .post('/users')
-      .send({
-        name: 'Test2',
         cpf: '111.444.777-35',
-        birthday: '28/01/1998',
       })
       .expect({
         statusCode: HttpStatus.CONFLICT,
@@ -102,7 +100,6 @@ describe('Users e2e', () => {
       cpf: '987.654.321-09',
       birthday: '28/01/1998',
     });
-
     const users = await request(app.getHttpServer()).get('/users');
     expect(users).not.toBe(null);
     expect(users.body.length).toBe(1);
@@ -127,6 +124,9 @@ describe('Users e2e', () => {
     const firstUser = await request(app.getHttpServer()).get(
       '/users?page=1&limit=1',
     );
+
+    //TODO: Trocar tudo para prisma
+
     expect(firstUser.body[0]).toEqual({
       id: createFirstUser.body.id,
       name: 'Test',
@@ -136,6 +136,7 @@ describe('Users e2e', () => {
     const secondUser = await request(app.getHttpServer()).get(
       '/users?page=2&limit=1',
     );
+
     expect(secondUser.body[0]).toEqual({
       id: createSecondUser.body.id,
       name: 'Test2',
