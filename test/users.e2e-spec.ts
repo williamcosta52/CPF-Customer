@@ -125,8 +125,6 @@ describe('Users e2e', () => {
       '/users?page=1&limit=1',
     );
 
-    //TODO: Trocar tudo para prisma
-
     expect(firstUser.body[0]).toEqual({
       id: createFirstUser.body.id,
       name: 'Test',
